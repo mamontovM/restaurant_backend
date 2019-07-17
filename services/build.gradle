@@ -6,4 +6,5 @@ dependencies {
 
   implementation project(":db")
 
+  compileClasspath "javax.persistence:javax.persistence-api:2.2"
 }
