@@ -82,6 +82,7 @@ allprojects {
     doLast {
       if (project.name == rootProject.name) {
         delete file("${rootProject.buildDir}/reports/spotbugs/main.html")
+        delete file("${rootProject.buildDir}/reports/spotbugs/main.xml")
       }
     }
   }
@@ -96,7 +97,6 @@ allprojects {
     doLast {
       if (project.name == rootProject.name) {
         delete file("${rootProject.buildDir}/reports/checkstyle/main.html")
-        delete file("${rootProject.buildDir}/reports/checkstyle/main.xml")
       }
     }
   }
