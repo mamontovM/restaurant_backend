@@ -6,3 +6,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/restaurant
     password: 171198nik
     username: postgres
+server:
+  port: 8080
+  servlet:
+    context-path: /restaurant

@@ -1,5 +1,4 @@
 rootProject.name = 'restaurant'
 include 'services'
 include 'db'
-include 'commons'
 

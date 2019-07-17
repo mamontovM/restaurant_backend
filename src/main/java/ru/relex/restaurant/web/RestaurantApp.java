@@ -5,10 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "ru.relex")
+@ComponentScan(basePackages = {"ru.relex"})
 public class RestaurantApp {
-
-    public static void main(String[] args) {
-        SpringApplication.run(RestaurantApp.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(RestaurantApp.class, args);
+  }
 }

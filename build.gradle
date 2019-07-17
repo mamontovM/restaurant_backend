@@ -1,3 +1,9 @@
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.stream.StreamResult
+import javax.xml.transform.stream.StreamSource
+
+import static org.gradle.api.tasks.PathSensitivity.NONE
+
 buildscript {
   repositories {
     ext {
@@ -17,41 +23,146 @@ buildscript {
 
 
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '2.1.6.RELEASE'
+  id 'java'
+  id 'org.springframework.boot' version '2.1.6.RELEASE'
 }
 
 allprojects {
-    ext {
-        springboot_ver = "2.1.6.RELEASE"
+  ext {
+    springboot_ver = "2.1.6.RELEASE"
+    pmd_tool_ver = "6.16.0"
+    checkstyle_tool_ver = "8.21"
+    spotbugs_tool_ver = "4.0.0-beta3"
+  }
+  apply {
+    plugin 'pmd'
+    plugin 'checkstyle'
+    plugin 'idea'
+    plugin 'com.github.spotbugs'
+  }
+  pmd {
+    ignoreFailures = false
+    rulePriority = 2
+    toolVersion = pmd_tool_ver
+    pmdTest.enabled = false
+    sourceSets = [sourceSets.main]
+    ruleSets = []
+    ruleSetFiles = files("${rootProject.projectDir}/codestyle/pmd.xml")
+    pmdMain {
+      reports {
+        html.enabled = true
+        xml.enabled = false
+      }
     }
-    version '1.0-SNAPSHOT'
-    group 'ru.relex'
+  }
+  spotbugs {
+    effort = "max"
+    reportLevel = "high"
+    toolVersion = spotbugs_tool_ver
+    ignoreFailures = false
+    spotbugsTest.enabled = false
+  }
 
-    sourceCompatibility = JavaVersion.VERSION_11
-
-    repositories {
-        jcenter()
-        mavenCentral()
+  checkstyle {
+    ignoreFailures = false
+    config = resources.text.fromFile("${rootProject.projectDir}/codestyle/checkstyle.xml")
+    maxWarnings = 10
+    toolVersion = checkstyle_tool_ver
+    sourceSets = [sourceSets.main]
+    showViolations = false
+    checkstyleTest.enabled = false
+    checkstyleMain {
+      reports {
+        html.enabled = true
+        xml.enabled = false
+      }
     }
+  }
+  task copyPmdReport(type: Copy) {
+    from "$buildDir/reports/pmd"
+    into "${rootProject.buildDir}/reports/pmd"
+    include "main.html"
+    rename "main.html", "${project.name}.html"
+    includeEmptyDirs = false
+
+    doLast {
+      if (project.name == rootProject.name) {
+        delete file("${rootProject.buildDir}/reports/pmd/main.html")
+      }
+    }
+  }
+
+  task copySpotBugsReports(type: Copy) {
+    from "$buildDir/reports/spotbugs"
+    into "${rootProject.buildDir}/reports/spotbugs/"
+    include "main.html"
+    rename "main.html", "${module.project.name}.html"
+    includeEmptyDirs = false
+    doLast {
+      if (project.name == rootProject.name) {
+        delete file("${rootProject.buildDir}/reports/spotbugs/main.html")
+      }
+    }
+  }
+  task copyCheckstyleReports(type: Copy) {
+    from "$buildDir/reports/checkstyle"
+    into "${rootProject.buildDir}/reports/checkstyle/"
+    include "main.html"
+    rename "main.html", "${module.project.name}.html"
+    includeEmptyDirs = false
+
+    doLast {
+      if (project.name == rootProject.name) {
+        delete file("${rootProject.buildDir}/reports/checkstyle/main.html")
+        delete file("${rootProject.buildDir}/reports/checkstyle/main.xml")
+      }
+    }
+  }
+  spotbugsMain {
+    reports {
+      xml.withMessages true
+    }
+
+    task spotbugsMainHtmlReport {
+      //def transformer = new net.sf.saxon.TransformerFactoryImpl()
+      def input = reports.xml.destination
+      inputs.file file("${rootProject.projectDir}/codestyle/fancy-hist.xsl") withPropertyName 'spotbugsStylesheet' withPathSensitivity NONE
+      inputs.files fileTree(input) withPropertyName 'input' withPathSensitivity NONE skipWhenEmpty()
+      def output = file(input.absolutePath.replaceFirst(/\.xml$/, '.html'))
+      outputs.file output withPropertyName 'output'
+      doLast {
+        def factory = TransformerFactory.newInstance()
+        def transformer = factory.newTransformer(new StreamSource(file("${rootProject.projectDir}/codestyle/fancy-hist.xsl")))
+        transformer.transform(new StreamSource(input), new StreamResult(output))
+      }
+    }
+    spotbugsMain.finalizedBy spotbugsMainHtmlReport
+    spotbugsMainHtmlReport.finalizedBy copySpotBugsReports
+  }
+  pmdMain.finalizedBy copyPmdReport
+  checkstyleMain.finalizedBy copyCheckstyleReports
+
+  task lint {
+    dependsOn spotbugsMain, pmdMain, checkstyleMain
+  }
+  version '1.0-SNAPSHOT'
+  group 'ru.relex'
+
+  sourceCompatibility = JavaVersion.VERSION_11
+
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
 }
 
 subprojects {
-    apply plugin: "java-library"
+  apply plugin: "java-library"
 }
 
-subprojects.each { proj ->
-    if (proj.name != "commons") {
-        proj.dependencies {
-            implementation project(":commons")
-        }
-    }
-}
-
-apply from: 'checks.gradle'
 
 dependencies {
-    implementation project(":services")
-    implementation "org.springframework.boot:spring-boot-starter-web:$springboot_ver"
-    //testCompile group: 'junit', name: 'junit', version: '4.12'
+  implementation project(":services")
+  implementation "org.springframework.boot:spring-boot-starter-web:$springboot_ver"
+  //testCompile group: 'junit', name: 'junit', version: '4.12'
 }
