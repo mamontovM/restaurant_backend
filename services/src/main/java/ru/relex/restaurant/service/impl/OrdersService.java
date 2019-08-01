@@ -73,10 +73,10 @@ public class OrdersService implements IOrdersService {
       isGiven = false;
       isAdd = false;
       for (History curHis : curOrd.getHistoryList()) {
-        if (currentUser.getRoleId() == 3 && curHis.getStatusId() == 5) {
+        if (currentUser.getRoleId() == 3 && curHis.getStatusId() == 6) {
           isGiven = true;
           break;
-        } else if (currentUser.getRoleId() == 2 && curHis.getStatusId() == 4) {
+        } else if (currentUser.getRoleId() == 2 && curHis.getStatusId() == 5) {
           isGiven = true;
           break;
         } else if (curHis.getUserId() == id) {
