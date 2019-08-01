@@ -44,7 +44,7 @@ public class HistoryService implements IHistoryService {
 
   @Override
   public List<HistoryDto> getAll(Date from, Date to) {
-    return historyMapper.toDto(historyRepository.findAllByTimeBetweenAndStatusIdIs(from, to, 5));
+    return historyMapper.toDto(historyRepository.findAllByTimeBetweenAndStatusIdIs(from, to, 6)); // нужно бы перечисление
   }
 
   /**
