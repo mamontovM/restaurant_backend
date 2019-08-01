@@ -11,6 +11,7 @@ public class DishDto {
   private Boolean ismenu;
   private Integer maxCount;
   private List<DishIngredientDto> consist;
+  private Boolean editable;
 
   public DishDto() {
   }
@@ -69,5 +70,13 @@ public class DishDto {
 
   public void setMaxCount(Integer maxCount) {
     this.maxCount = maxCount;
+  }
+
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
   }
 }

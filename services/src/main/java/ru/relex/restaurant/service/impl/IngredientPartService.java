@@ -147,7 +147,7 @@ public class IngredientPartService implements IIngredientPartService {
 
         parts.get(theOldestPartIdInArray).setValue(0.0);
         repository.save(mapperFull.fromDto(parts.get(theOldestPartIdInArray)));
-        // наверное можно и удалить пустую партию
+        // можно удалить пустую партию
         repository.deleteById(parts.get(theOldestPartIdInArray).getId());
         parts.remove(theOldestPartIdInArray);
       }
@@ -157,7 +157,6 @@ public class IngredientPartService implements IIngredientPartService {
 
   @Override
   public Double summaryVolumeOfAllIngredients() {
-
     Double result = 0.0;
 //    List<IngredientPartFullDto> allParts = mapperFull.toDto(repository.findAll());
     List<IngredientDto> allIngredients = ingredientMapper.toDto(ingredientRepository.findAll());
@@ -172,6 +171,13 @@ public class IngredientPartService implements IIngredientPartService {
     return result;
   }
 
+  /**
+   * списывает ингредиенты со склада, необходимые для приготовления списка переданных блюд
+   *
+   * @param dishes - список блюд
+   * @return true - если ингредиентов хватает и они списались
+   * false  - если не хватило ингредиентов (количество ингредиентов на складе не изменится)
+   */
   public boolean debetIngredients(List<OrderDishDto> dishes) {
     //посчитать все ингредиенты
     Map<Integer, Double> needIngredientsAmount = new HashMap<>();
@@ -181,20 +187,22 @@ public class IngredientPartService implements IIngredientPartService {
         Integer mapKey = consist.get(j).getIngredient().getId();
         if (needIngredientsAmount.containsKey(mapKey)) {
           needIngredientsAmount.put(mapKey,
-              needIngredientsAmount.get(mapKey) + (consist.get(j).getValue()*dishes.get(i).getCount()));
+              needIngredientsAmount.get(mapKey) + (consist.get(j).getValue() * dishes.get(i).getCount()));
         } else {
-          needIngredientsAmount.put(mapKey,consist.get(j).getValue()*dishes.get(i).getCount());
+          needIngredientsAmount.put(mapKey, consist.get(j).getValue() * dishes.get(i).getCount());
         }
       }
     }
-    for (Map.Entry<Integer, Double> entry: needIngredientsAmount.entrySet()) {
+    // проверка всех ли ингредиентов хватает, если нет - отмена списания
+    for (Map.Entry<Integer, Double> entry : needIngredientsAmount.entrySet()) {
       Integer ingrId = entry.getKey();
       Double needAmount = entry.getValue();
-      if (summaryAmountOfIngredient(ingrId) < needAmount){
+      if (summaryAmountOfIngredient(ingrId) < needAmount) {
         return false;
       }
     }
-    for (Map.Entry<Integer, Double> entry: needIngredientsAmount.entrySet()) {
+    // ингредиентов на складе хватило
+    for (Map.Entry<Integer, Double> entry : needIngredientsAmount.entrySet()) {
       Integer ingrId = entry.getKey();
       Double needAmount = entry.getValue();
       if (!reduceAmountOfIngredient(ingrId, needAmount)) {

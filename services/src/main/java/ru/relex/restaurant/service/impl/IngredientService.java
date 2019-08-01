@@ -24,7 +24,7 @@ public class IngredientService implements IIngredientService {
   private final IngredientRepository repository;
   private final IIngredientMapper mapper;
 
-  private static final Integer DISHES_IN_RESERVE = 10;
+  private static final Integer DISHES_IN_RESERVE = 10; // количество блюд в запасе, для рассчета недостающих ингредиентов
   private static final Integer MIN_EXPIRATION_DATE = 7; // минимальный запас срока годности в днях
 
 
@@ -43,6 +43,11 @@ public class IngredientService implements IIngredientService {
     result.setTotalCount(repository.count());
 
     return result;
+  }
+
+  @Override
+  public List<IngredientDto> listIngredientsNoPagination() {
+    return mapper.toDto(repository.findAll());
   }
 
   @Override

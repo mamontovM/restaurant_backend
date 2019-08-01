@@ -33,7 +33,7 @@ public class HistoryService implements IHistoryService {
     History historyForSave = historyMapper.fromDto(historyDto);
     historyForSave.setTime(new Date());
     History savedHistory = historyRepository.save(historyForSave);
-    if (historyDto.getCook_id()!= null){
+    if (historyDto.getCook_id() != null) {
       historyForSave.setUserId(historyDto.getCook_id());
       historyForSave.setTime(new Date());
       historyForSave.setStatusId(StatusEnum.CookAssigned.getStatusId());
@@ -47,6 +47,13 @@ public class HistoryService implements IHistoryService {
     return historyMapper.toDto(historyRepository.findAllByTimeBetweenAndStatusIdIs(from, to, 5));
   }
 
+  /**
+   * возвращает выручку, использванные ингредиенты и количество проданных блюд за указанный промежуток времени
+   *
+   * @param from
+   * @param to
+   * @return
+   */
   @Override
   public StatisticDto getStatistic(Date from, Date to) {
     StatisticDto result = new StatisticDto();
@@ -57,6 +64,7 @@ public class HistoryService implements IHistoryService {
     for (HistoryDto oneHistory : history) {
 
       for (OrderDishDto oneOrderConsist : oneHistory.getOrder().getConsist()) {
+        // подсчет выручки и количества проданных блюд
         if (soldDishes.containsKey(oneOrderConsist.getDish().getName())) {
           Integer newDishesCount = soldDishes.get(oneOrderConsist.getDish().getName()) + oneOrderConsist.getCount();
           soldDishes.put(oneOrderConsist.getDish().getName(), newDishesCount);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import ru.relex.restaurant.service.DTO.DishDto;
 import ru.relex.restaurant.service.DTO.DishIngredientDto;
 import ru.relex.restaurant.service.DTO.DishIngredientIdDto;
@@ -40,6 +41,18 @@ public class DishController {
   @RolesAllowed({"ADMIN"})
   public void createDish(@RequestBody DishDto dishDto) {
     dishService.createDish(dishDto);
+  }
+
+  @PutMapping
+  @RolesAllowed({"ADMIN"})
+  public void updateDish(@RequestBody DishDto dishDto) {
+    dishService.updateDish(dishDto);
+  }
+
+  @DeleteMapping("/{dishId}")
+  @RolesAllowed({"ADMIN"})
+  public void deleteUnsoldDish(@PathVariable("dishId") Integer dishId) {
+    dishService.deleteUnsoldDish(dishId);
   }
 
   @GetMapping

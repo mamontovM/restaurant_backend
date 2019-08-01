@@ -49,6 +49,11 @@ public class IngredientController {
     return dishIngredientService.isUsedInDish(ingredientId);
   }
 
+  @GetMapping("/nopage")
+  public List<IngredientDto> listIngredientsNoPagination() {
+    return ingredientService.listIngredientsNoPagination();
+  }
+
 
   @GetMapping
   public IngredientsWithTotalCountDto listIngredients(
@@ -67,10 +72,9 @@ public class IngredientController {
 
   @GetMapping("/check")
   @RolesAllowed({"KEEPER"})
-  public boolean checkIngredientNameUnique(@RequestParam(name = "name", required = true) String name) {
+  public boolean checkIngredientNameUnique(@RequestParam(name = "name") String name) {
     return ingredientService.checkIngredientNameUnique(name);
   }
-
 
   @DeleteMapping("/{id}")
   @RolesAllowed({"KEEPER"})

@@ -10,6 +10,7 @@ import ru.relex.restaurant.service.DTO.DishDto;
 import ru.relex.restaurant.service.DTO.DishesWithTotalCountDto;
 import ru.relex.restaurant.service.IDishService;
 import ru.relex.restaurant.service.IIngredientPartService;
+import ru.relex.restaurant.service.IOrderDishService;
 import ru.relex.restaurant.service.mapper.IDishMapper;
 
 import java.util.ArrayList;
@@ -19,26 +20,44 @@ import java.util.List;
 @Service
 public class DishService implements IDishService {
   private final DishRepository dishRepository;
-  private final IDishMapper mapper;
+  private final IDishMapper dishMapper;
   private final IIngredientPartService ingredientPartService;
+  private final IOrderDishService orderDishService;
 
-  public DishService(DishRepository dishRepository, IDishMapper mapper, IIngredientPartService ingredientPartService) {
+  public DishService(DishRepository dishRepository, IDishMapper mapper,
+                     IIngredientPartService ingredientPartService, IOrderDishService orderDishService) {
     this.dishRepository = dishRepository;
-    this.mapper = mapper;
+    this.dishMapper = mapper;
     this.ingredientPartService = ingredientPartService;
+    this.orderDishService = orderDishService;
   }
 
   @Override
   public void createDish(DishDto dto) {
     if (dto.getCost() > 0) {
-      dishRepository.save(mapper.fromDto(dto));
+      dishRepository.save(dishMapper.fromDto(dto));
+    }
+  }
+
+  @Override
+  public void updateDish(DishDto dish) {
+    if (orderDishService.isOrderedDish(dish)) {
+      // такое блюдо уже заказывали - у него нельзя менять состав и цену
+      DishDto oldDish = dishMapper.toDto(dishRepository.findById(dish.getId()).orElse(null));
+      dish.setConsist(oldDish.getConsist());
+      dish.setCost(oldDish.getCost());
+    }
+    if (dish.getCost() > 0) {
+      dishRepository.save(dishMapper.fromDto(dish));
     }
   }
 
   @Override
   public List<DishDto> listDishesInMenu() {
-    List<DishDto> dishesInMenu = mapper.toDto(dishRepository.findAllDishesInMenu());
+    List<DishDto> dishesInMenu = dishMapper.toDto(dishRepository.findAllDishesInMenu());
     ArrayList<Integer> ingredientMaxDish = new ArrayList<>();
+
+    // подсчет максимально возможного количества блюд
     for (int i = 0; i < dishesInMenu.size(); i++) {
       ingredientMaxDish.clear();
       for (int j = 0; j < dishesInMenu.get(i).getConsist().size(); j++) {
@@ -52,13 +71,29 @@ public class DishService implements IDishService {
   }
 
   @Override
-  public DishesWithTotalCountDto listDishesAllTime(int pageIndex, int pageSize, String sortDirection, String sortedBy, String filter) {
+  public DishesWithTotalCountDto listDishesAllTime(int pageIndex, int pageSize, String sortDirection,
+                                                   String sortedBy, String filter) {
     DishesWithTotalCountDto result = new DishesWithTotalCountDto();
-
     Pageable sortAndPaginator = PageRequest.of(pageIndex, pageSize, Sort.Direction.fromString(sortDirection), sortedBy);
-    result.setItems(mapper.toDto(dishRepository.findDishesByNameLikeIgnoreCase("%" + filter + "%", sortAndPaginator).getContent()));
-    result.setTotalCount(dishRepository.findDishesByNameLikeIgnoreCase("%" + filter + "%", sortAndPaginator).getTotalElements());
+    List<DishDto> dishes = dishMapper.toDto(
+        dishRepository.findDishesByNameLikeIgnoreCase("%" + filter + "%", sortAndPaginator).getContent());
+    for (DishDto dish : dishes) {
+      dish.setEditable(!orderDishService.isOrderedDish(dish));
+    }
+    result.setItems(dishes);
+    result.setTotalCount(
+        dishRepository.findDishesByNameLikeIgnoreCase("%" + filter + "%", sortAndPaginator).getTotalElements());
     return result;
+  }
+
+  @Override
+  public void deleteUnsoldDish(Integer id) {
+    DishDto dish = dishMapper.toDto(dishRepository.findById(id).orElse(null));
+
+    if (!orderDishService.isOrderedDish(dish)) {
+      // не было в заказах таких блюд
+      dishRepository.deleteById(id);
+    }
   }
 
 }

@@ -1,10 +1,7 @@
 package ru.relex.restaurant.service;
 
 
-import ru.relex.restaurant.service.DTO.DishDto;
-import ru.relex.restaurant.service.DTO.IngredientDto;
-import ru.relex.restaurant.service.DTO.IngredientsWithTotalCountDto;
-import ru.relex.restaurant.service.DTO.MissingIngredientDto;
+import ru.relex.restaurant.service.DTO.*;
 
 
 import java.util.List;
@@ -14,6 +11,8 @@ public interface IIngredientService {
   void createIngredient(IngredientDto ingredientDto);
 
   IngredientsWithTotalCountDto listIngredients(int pageIndex, int pageSize, String sortDirection, String sortedBy);
+
+  List<IngredientDto> listIngredientsNoPagination();
 
   void updateIngredient(IngredientDto ingredientDto);
 

@@ -36,6 +36,12 @@ public class DishIngredientService implements IDishIngredientService {
     repository.deleteById(dbId);
   }
 
+  /**
+   * содержится ли ингредиент в блюде
+   *
+   * @param ingredientId
+   * @return
+   */
   @Override
   public boolean isUsedInDish(Integer ingredientId) {
     List<DishIngredientDto> result = mapper.toDto(repository.findDishIngredientsByIngredient_Id(ingredientId));
