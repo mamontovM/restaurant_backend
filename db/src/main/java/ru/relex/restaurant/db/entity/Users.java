@@ -14,19 +14,18 @@ public class Users {
   private String password;
   private String name;
   private String surname;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "role_id")
-  private Roles role;
+  private int roleId;
 
   public Users() {
   }
 
-  public Users(int id, String login, String password, String name, String surname) {
+  public Users(int id, String login, String password, String name, String surname, int roleId) {
     this.id = id;
     this.login = login;
     this.password = password;
     this.name = name;
     this.surname = surname;
+    this.roleId = roleId;
   }
 
   public int getId() {
@@ -83,6 +82,14 @@ public class Users {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, login, password, name, surname, role);
+    return Objects.hash(id, login, password, name, surname, roleId);
+  }
+
+  public int getRoleId() {
+    return roleId;
+  }
+
+  public void setRoleId(int roleId) {
+    this.roleId = roleId;
   }
 }

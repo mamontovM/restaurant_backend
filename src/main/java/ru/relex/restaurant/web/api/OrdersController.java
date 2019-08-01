@@ -2,24 +2,16 @@ package ru.relex.restaurant.web.api;
 
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.relex.restaurant.service.DTO.OrdersDto;
 import ru.relex.restaurant.service.impl.OrdersService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value =
-    "/orders")
+@RequestMapping(value = "/orders",
+    consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrdersController {
   private final OrdersService ordersService;
 
@@ -41,15 +33,23 @@ public class OrdersController {
     return ordersService.getAll();
   }
 
+  @GetMapping("/allOrdersById/{id}")
+  public List<OrdersDto> getAllById(@PathVariable("id") int id) {
+    return ordersService.getAllById(id);
+  }
+
   @PostMapping
-  public boolean insert(@RequestBody OrdersDto ordersDto) {
-    boolean isDone = ordersService.insert(ordersDto);
-    return isDone;
+  public OrdersDto insert(@RequestBody OrdersDto ordersDto) {
+    OrdersDto createdOrder = ordersService.insert(ordersDto);
+    if (createdOrder == null) {
+      return null;
+    }
+    return createdOrder;
 
   }
 
   @PutMapping
-  public OrdersDto update(@PathVariable OrdersDto ordersDto) {
+  public OrdersDto update(@RequestBody OrdersDto ordersDto) {
     OrdersDto updatedOrders = ordersService.update(ordersDto);
     if (updatedOrders == null) {
       return null;

@@ -69,4 +69,10 @@ public class UserService implements IUserService {
     List<Users> usersList = usersRepository.findAll();
     return userMapper.toDto(usersList);
   }
+
+  @Override
+  public List<UserDto> getAllCook() {
+    List<Users> usersList = usersRepository.findByRoleId(2);
+    return userMapper.toDto(usersList);
+  }
 }

@@ -1,7 +1,6 @@
 package ru.relex.restaurant.db.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +11,7 @@ public class Dish {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dishes_seq")
   @SequenceGenerator(name = "dishes_seq", sequenceName = "dishes_id_seq", allocationSize = 1)
   private Integer id;
+
   private String name;
 
   @Column(updatable = false)
@@ -19,34 +19,15 @@ public class Dish {
   private String type;
   private Boolean ismenu;
 
-  @ElementCollection
-  @CollectionTable(name = "dish_ingredient", joinColumns = @JoinColumn(name = "dish_id"))
-  @Column(name = "value")
-  private List<Double> values = new ArrayList<>();
+  @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<DishIngredient> consist;
 
-  public List<Double> getValues() {
-    return values;
+  public List<DishIngredient> getConsist() {
+    return consist;
   }
 
-  public void setValues(List<Double> values) {
-    this.values = values;
-  }
-//    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    private List<DishIngredient> dishIngredient3 = new ArrayList<>();
-
-
-  @ManyToMany()
-  @JoinTable(name = "dish_ingredient",
-      joinColumns = @JoinColumn(name = "dish_id"),
-      inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-  private List<Ingredient> ingredients;
-
-  public List<Ingredient> getIngredients() {
-    return ingredients;
-  }
-
-  public void setIngredients(List<Ingredient> ingredients) {
-    this.ingredients = ingredients;
+  public void setConsist(List<DishIngredient> consist) {
+    this.consist = consist;
   }
 
   public Dish() {
@@ -103,12 +84,11 @@ public class Dish {
         Objects.equals(cost, dish.cost) &&
         Objects.equals(type, dish.type) &&
         Objects.equals(ismenu, dish.ismenu) &&
-        Objects.equals(values, dish.values) &&
-        Objects.equals(ingredients, dish.ingredients);
+        Objects.equals(consist, dish.consist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, cost, type, ismenu, values, ingredients);
+    return Objects.hash(id, name, cost, type, ismenu, consist);
   }
 }

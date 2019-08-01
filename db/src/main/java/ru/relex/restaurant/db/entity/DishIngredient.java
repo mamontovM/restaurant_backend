@@ -17,14 +17,12 @@ public class DishIngredient implements Serializable {
 
   private Double value;
 
-  //    @MapsId("dishId")
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "dish_id", insertable = false, updatable = false)
+  @JoinColumn(name = "dish_id", insertable = false, updatable = false) //
   private Dish dish;
 
-  //    @MapsId("ingredientId")
   @ManyToOne
-  @JoinColumn(name = "ingredient_id", insertable = false, updatable = false)
+  @JoinColumn(name = "ingredient_id", insertable = false, updatable = false) // , insertable = false, updatable = false
   private Ingredient ingredient;
 
   public DishIngredient() {
@@ -38,14 +36,6 @@ public class DishIngredient implements Serializable {
     this.id = id;
   }
 
-  public Dish getDishId() {
-    return dish;
-  }
-
-  public void setDishId(Dish dishId) {
-    this.dish = dishId;
-  }
-
   public Double getValue() {
     return value;
   }
@@ -54,17 +44,9 @@ public class DishIngredient implements Serializable {
     this.value = value;
   }
 
-  public Dish getDish() {
-    return dish;
-  }
-
-  public void setDish(Dish dish) {
-    this.dish = dish;
-  }
-
   public Ingredient getIngredient() {
-    return ingredient;
-  }
+  return ingredient;
+}
 
   public void setIngredient(Ingredient ingredient) {
     this.ingredient = ingredient;
@@ -76,13 +58,11 @@ public class DishIngredient implements Serializable {
     if (o == null || getClass() != o.getClass()) return false;
     DishIngredient that = (DishIngredient) o;
     return Objects.equals(id, that.id) &&
-        Objects.equals(value, that.value) &&
-        Objects.equals(dish, that.dish) &&
-        Objects.equals(ingredient, that.ingredient);
+        Objects.equals(value, that.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, value, dish, ingredient);
+    return Objects.hash(id, value);
   }
 }

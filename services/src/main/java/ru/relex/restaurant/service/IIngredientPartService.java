@@ -1,19 +1,22 @@
 package ru.relex.restaurant.service;
 
 
-import ru.relex.restaurant.service.DTO.IngredientPartDto;
 import ru.relex.restaurant.service.DTO.IngredientPartFullDto;
+import ru.relex.restaurant.service.DTO.OrderDishDto;
 
 import java.util.List;
 
-public interface IIngredientPartService {
-  List<IngredientPartDto> listIngredientParts();//List<IngredientPartDto> listIngredientParts(IngredientDto dto)
 
-  IngredientPartDto findOneById(int id);
+public interface IIngredientPartService {
 
   void createIngredientPart(IngredientPartFullDto dto);
 
-  void updateIngredientPart(IngredientPartDto dto);
-
   void deleteIngredientPart(int id);
+
+  boolean reduceAmountOfIngredient(Integer ingrId, Double delta);
+
+  Double summaryAmountOfIngredient(Integer ingrId);
+
+  Double summaryVolumeOfAllIngredients();
+  boolean debetIngredients(List<OrderDishDto> dishes);
 }

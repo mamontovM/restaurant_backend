@@ -1,7 +1,8 @@
 package ru.relex.restaurant.db.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ingredient_parts")
@@ -55,4 +56,19 @@ public class IngredientPart {
     this.ingredientId = ingredientId;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    IngredientPart that = (IngredientPart) o;
+    return Objects.equals(id, that.id) &&
+        Objects.equals(value, that.value) &&
+        Objects.equals(expirationDate, that.expirationDate) &&
+        Objects.equals(ingredientId, that.ingredientId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, value, expirationDate, ingredientId);
+  }
 }

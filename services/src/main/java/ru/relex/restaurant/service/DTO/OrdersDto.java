@@ -1,16 +1,16 @@
 package ru.relex.restaurant.service.DTO;
 
 
+import java.util.List;
+
 public class OrdersDto {
   private int id;
-  private String comment;
+  private String comments;
+
+  private List<HistoryOrderDto> historyList;
+  private List<OrderDishDto> consist;
 
   public OrdersDto() {
-  }
-
-  public OrdersDto(int id, String comment) {
-    this.id = id;
-    this.comment = comment;
   }
 
   public int getId() {
@@ -21,11 +21,28 @@ public class OrdersDto {
     this.id = id;
   }
 
-  public String getComment() {
-    return comment;
+  public String getComments() {
+    return comments;
   }
 
-  public void setComment(String comment) {
-    this.comment = comment;
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
+
+
+  public List<OrderDishDto> getConsist() {
+    return consist;
+  }
+
+  public void setConsist(List<OrderDishDto> consist) {
+    this.consist = consist;
+  }
+
+  public List<HistoryOrderDto> getHistoryList() {
+    return historyList;
+  }
+
+  public void setHistoryList(List<HistoryOrderDto> historyList) {
+    this.historyList = historyList;
   }
 }

@@ -11,5 +11,7 @@ public interface IOrdersService {
 
   public OrdersDto update(OrdersDto ordersDto);
 
-  public boolean insert(OrdersDto ordersDto);
+  public OrdersDto insert(OrdersDto ordersDto);
+
+  public List<OrdersDto> getAllById(int id);
 }

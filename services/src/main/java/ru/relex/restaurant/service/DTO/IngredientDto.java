@@ -8,16 +8,10 @@ public class IngredientDto {
   private Integer id;
   private String name;
   private String measure;
+  private Double volumePerUnit;
   private List<IngredientPartDto> parts;
 
   public IngredientDto() {
-  }
-
-  public IngredientDto(Integer id, String name, String measure, List<IngredientPartDto> parts) {
-    this.id = id;
-    this.name = name;
-    this.measure = measure;
-    this.parts = parts;
   }
 
   public Integer getId() {
@@ -42,6 +36,14 @@ public class IngredientDto {
 
   public void setMeasure(String measure) {
     this.measure = measure;
+  }
+
+  public Double getVolumePerUnit() {
+    return volumePerUnit;
+  }
+
+  public void setVolumePerUnit(Double volumePerUnit) {
+    this.volumePerUnit = volumePerUnit;
   }
 
   public List<IngredientPartDto> getParts() {

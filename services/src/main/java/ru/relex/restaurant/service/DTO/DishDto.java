@@ -9,18 +9,19 @@ public class DishDto {
   private Double cost;
   private String type;
   private Boolean ismenu;
-  private List<Double> values;
-  private List<IngredientForDishDto> ingredients;
+  private Integer maxCount;
+  private List<DishIngredientDto> consist;
+  private Boolean editable;
 
   public DishDto() {
   }
 
-  public List<Double> getValues() {
-    return values;
+  public List<DishIngredientDto> getConsist() {
+    return consist;
   }
 
-  public void setValues(List<Double> values) {
-    this.values = values;
+  public void setConsist(List<DishIngredientDto> consist) {
+    this.consist = consist;
   }
 
   public Integer getId() {
@@ -63,11 +64,19 @@ public class DishDto {
     this.ismenu = ismenu;
   }
 
-  public List<IngredientForDishDto> getIngredients() {
-    return ingredients;
+  public Integer getMaxCount() {
+    return maxCount;
   }
 
-  public void setIngredients(List<IngredientForDishDto> ingredients) {
-    this.ingredients = ingredients;
+  public void setMaxCount(Integer maxCount) {
+    this.maxCount = maxCount;
+  }
+
+  public Boolean getEditable() {
+    return editable;
+  }
+
+  public void setEditable(Boolean editable) {
+    this.editable = editable;
   }
 }

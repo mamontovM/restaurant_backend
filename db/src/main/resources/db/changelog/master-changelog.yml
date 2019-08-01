@@ -8,7 +8,7 @@ databaseChangeLog:
       comment: Create dish, ingridient, dish_ingridient tables
       changes:
         - sqlFile:
-            path: changesets/RE-001.sql
+            path: changesets/changeset_1.0.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 2
@@ -24,7 +24,7 @@ databaseChangeLog:
       comment: Fills ingredients, ingredient_parts tables
       changes:
         - sqlFile:
-            path: changesets/changeset_3.sql
+            path: changesets/changeset_3.0.sql
             relativeToChangelogFile: true
 
   - changeSet:
@@ -33,5 +33,21 @@ databaseChangeLog:
       comment: insert data for table roles and users
       changes:
         - sqlFile:
-            path: changesets/changeset_3.0.sql
+            path: changesets/changeset_4.0.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 5
+      author: potapov
+      comment: insert data for status
+      changes:
+        - sqlFile:
+            path: changesets/changeset_4.1.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 6
+      author: mmamontov
+      comment: Add volumePerUnit column to ingredients table
+      changes:
+        - sqlFile:
+            path: changesets/changeset_5.0.sql
             relativeToChangelogFile: true

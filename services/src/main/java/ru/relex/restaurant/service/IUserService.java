@@ -15,4 +15,6 @@ public interface IUserService {
   public UserDto update(UserDto userDto);
 
   public List<UserDto> getAll();
+
+  public List<UserDto> getAllCook();
 }

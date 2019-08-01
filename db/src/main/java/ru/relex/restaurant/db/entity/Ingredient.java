@@ -14,18 +14,14 @@ public class Ingredient {
   private Integer id;
   private String name;
   private String measure;
+  @Column(name = "volume_per_unit")
+  private Double volumePerUnit;
 
   @OneToMany(mappedBy = "ingredientId", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
   private List<IngredientPart> parts;
 
 
   public Ingredient() {
-  }
-
-  public Ingredient(String name, String measure, List<IngredientPart> parts) {
-    this.name = name;
-    this.measure = measure;
-    this.parts = parts;
   }
 
   public Integer getId() {
@@ -50,6 +46,14 @@ public class Ingredient {
 
   public void setMeasure(String measure) {
     this.measure = measure;
+  }
+
+  public Double getVolumePerUnit() {
+    return volumePerUnit;
+  }
+
+  public void setVolumePerUnit(Double volumePerUnit) {
+    this.volumePerUnit = volumePerUnit;
   }
 
   public List<IngredientPart> getParts() {

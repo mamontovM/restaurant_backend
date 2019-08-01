@@ -1,11 +1,11 @@
 package ru.relex.restaurant.service.DTO;
 
-import java.util.List;
 
 public class IngredientForDishDto {
   private Integer id;
   private String name;
   private String measure;
+  private Double volumePerUnit;
 
   public IngredientForDishDto() {
   }
@@ -34,4 +34,11 @@ public class IngredientForDishDto {
     this.measure = measure;
   }
 
+  public Double getVolumePerUnit() {
+    return volumePerUnit;
+  }
+
+  public void setVolumePerUnit(Double volumePerUnit) {
+    this.volumePerUnit = volumePerUnit;
+  }
 }

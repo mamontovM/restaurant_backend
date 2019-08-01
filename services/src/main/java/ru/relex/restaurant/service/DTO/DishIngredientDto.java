@@ -3,10 +3,10 @@ package ru.relex.restaurant.service.DTO;
 import ru.relex.restaurant.db.entity.DishIngredientId;
 
 public class DishIngredientDto {
-  // private Integer id;
+
   private DishIngredientId id;
   private Double value;
-  private IngredientDto ingredient;
+  private IngredientForDishDto ingredient;
 
 
   public DishIngredientDto() {
@@ -28,11 +28,11 @@ public class DishIngredientDto {
     this.value = value;
   }
 
-  public IngredientDto getIngredient() {
+  public IngredientForDishDto getIngredient() {
     return ingredient;
   }
 
-  public void setIngredient(IngredientDto ingredient) {
+  public void setIngredient(IngredientForDishDto ingredient) {
     this.ingredient = ingredient;
   }
 }

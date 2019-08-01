@@ -14,7 +14,7 @@ public class DishIngredientId implements Serializable {
   private Integer dishId;
 
   @Column(name = "ingredient_id")
-  private Integer ingredienetId;
+  private Integer ingredientId;
 
   public DishIngredientId() {
   }
@@ -27,12 +27,12 @@ public class DishIngredientId implements Serializable {
     this.dishId = dishId;
   }
 
-  public Integer getIngredinetId() {
-    return ingredienetId;
+  public Integer getIngredientId() {
+    return ingredientId;
   }
 
-  public void setIngredinetId(Integer ingredienetId) {
-    this.ingredienetId = ingredienetId;
+  public void setIngredientId(Integer ingredientId) {
+    this.ingredientId = ingredientId;
   }
 
   @Override
@@ -41,19 +41,19 @@ public class DishIngredientId implements Serializable {
     if (o == null || getClass() != o.getClass()) return false;
     DishIngredientId that = (DishIngredientId) o;
     return Objects.equals(dishId, that.dishId) &&
-        Objects.equals(ingredienetId, that.ingredienetId);
+        Objects.equals(ingredientId, that.ingredientId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dishId, ingredienetId);
+    return Objects.hash(dishId, ingredientId);
   }
 
   @Override
   public String toString() {
     return "DishIngredientId{" +
         "dishId=" + dishId +
-        ", ingredienetId=" + ingredienetId +
+        ", ingredienetId=" + ingredientId +
         '}';
   }
 }

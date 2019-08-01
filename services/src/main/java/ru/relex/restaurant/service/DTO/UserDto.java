@@ -1,25 +1,26 @@
 package ru.relex.restaurant.service.DTO;
 
-import ru.relex.restaurant.db.entity.Roles;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserDto {
   private int id;
   private String login;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
   private String name;
   private String surname;
-  private Roles roleDto;
+  private int roleId;
 
   public UserDto() {
   }
 
-  public UserDto(int id, String login, String password, String name, String surname, Roles role, Roles roleDto) {
+  public UserDto(int id, String login, String password, String name, String surname, int roleId) {
     this.id = id;
     this.login = login;
     this.password = password;
     this.name = name;
     this.surname = surname;
-    this.roleDto = roleDto;
+    this.roleId = roleId;
   }
 
   public int getId() {
@@ -63,11 +64,11 @@ public class UserDto {
   }
 
 
-  public Roles getRoleDto() {
-    return roleDto;
+  public int getRoleId() {
+    return roleId;
   }
 
-  public void setRoleDto(Roles roleDto) {
-    this.roleDto = roleDto;
+  public void setRoleId(int roleId) {
+    this.roleId = roleId;
   }
 }
