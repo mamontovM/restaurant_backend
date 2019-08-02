@@ -65,6 +65,10 @@ public class DishService implements IDishService {
             / dishesInMenu.get(i).getConsist().get(j).getValue();
         ingredientMaxDish.add(temp.intValue());
       }
+      // если в блюде нет ингредиентов, то максимум этих блюд будет 0
+      if (dishesInMenu.get(i).getConsist().size() == 0) {
+        ingredientMaxDish.add(0);
+      }
       dishesInMenu.get(i).setMaxCount(Collections.min(ingredientMaxDish));
     }
     return dishesInMenu;
