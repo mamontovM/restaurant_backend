@@ -10,7 +10,7 @@ import java.util.List;
 public interface IIngredientService {
   void createIngredient(IngredientDto ingredientDto);
 
-  IngredientsWithTotalCountDto listIngredients(int pageIndex, int pageSize, String sortDirection, String sortedBy);
+  IngredientsWithTotalCountDto listIngredients(int pageIndex, int pageSize, String sortDirection, String sortedBy, String filter);
 
   List<IngredientDto> listIngredientsNoPagination();
 
