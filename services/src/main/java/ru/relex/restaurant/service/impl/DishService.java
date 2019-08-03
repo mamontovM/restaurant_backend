@@ -55,23 +55,30 @@ public class DishService implements IDishService {
   @Override
   public List<DishDto> listDishesInMenu() {
     List<DishDto> dishesInMenu = dishMapper.toDto(dishRepository.findAllDishesInMenu());
-    ArrayList<Integer> ingredientMaxDish = new ArrayList<>();
 
-    // подсчет максимально возможного количества блюд
     for (int i = 0; i < dishesInMenu.size(); i++) {
-      ingredientMaxDish.clear();
-      for (int j = 0; j < dishesInMenu.get(i).getConsist().size(); j++) {
-        Double temp = ingredientPartService.summaryAmountOfIngredient(dishesInMenu.get(i).getConsist().get(j).getIngredient().getId())
-            / dishesInMenu.get(i).getConsist().get(j).getValue();
-        ingredientMaxDish.add(temp.intValue());
-      }
-      // если в блюде нет ингредиентов, то максимум этих блюд будет 0
-      if (dishesInMenu.get(i).getConsist().size() == 0) {
-        ingredientMaxDish.add(0);
-      }
-      dishesInMenu.get(i).setMaxCount(Collections.min(ingredientMaxDish));
+      dishesInMenu.get(i).setMaxCount(calculateMaxDishCount(dishesInMenu.get(i)));
     }
     return dishesInMenu;
+  }
+
+  /**
+   * вычисляет максимально возможное количество блюда
+   *
+   * @param dish
+   * @return
+   */
+  private Integer calculateMaxDishCount(DishDto dish) {
+    ArrayList<Integer> ingredientMaxDish = new ArrayList<>();
+    for (int j = 0; j < dish.getConsist().size(); j++) {
+      Double temp = ingredientPartService.summaryAmountOfIngredient(dish.getConsist().get(j).getIngredient().getId())
+          / dish.getConsist().get(j).getValue();
+      ingredientMaxDish.add(temp.intValue());
+    }
+    if (dish.getConsist().size() == 0) {
+      ingredientMaxDish.add(0);
+    }
+    return Collections.min(ingredientMaxDish);
   }
 
   @Override

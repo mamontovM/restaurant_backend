@@ -74,11 +74,10 @@ public class IngredientService implements IIngredientService {
     List<MissingIngredientDto> missingIngredietns = new ArrayList<>();
     Double maxCountOfIngredientInDishes = 0.0;
 
-    //
+
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DATE, MIN_EXPIRATION_DATE - 1);
-    // получить максимальное количество ингредиента в блюде из меню и умножить на константу DishesInReserve = 10
-    // если
+
     for (int i = 0; i < allIngredietns.size(); i++) {
       maxCountOfIngredientInDishes = 0.0;
 

@@ -34,11 +34,11 @@ public class IngredientPartController {
     ingredientPartService.createIngredientPart(dto);
   }
 
-  @PutMapping("/reduce") // вроде можно удалить
-  public boolean reduceAmountOfIngredient(@RequestParam(name = "ingredientId", required = true) Integer ingredientId,
-                                          @RequestParam(name = "delta", required = true) Double delta) {
-    return ingredientPartService.reduceAmountOfIngredient(ingredientId, delta);
-  }
+//  @PutMapping("/reduce") // вроде можно удалить
+//  public boolean reduceAmountOfIngredient(@RequestParam(name = "ingredientId", required = true) Integer ingredientId,
+//                                          @RequestParam(name = "delta", required = true) Double delta) {
+//    return ingredientPartService.reduceAmountOfIngredient(ingredientId, delta);
+//  }
 
   @PutMapping("/debit")
   @RolesAllowed({"WAITER", "COOKER"})
