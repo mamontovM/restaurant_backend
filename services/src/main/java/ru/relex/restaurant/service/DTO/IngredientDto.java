@@ -10,6 +10,7 @@ public class IngredientDto {
   private String measure;
   private Double volumePerUnit;
   private List<IngredientPartDto> parts;
+  private Double summaryFreshAmount;
 
   public IngredientDto() {
   }
@@ -52,5 +53,13 @@ public class IngredientDto {
 
   public void setParts(List<IngredientPartDto> parts) {
     this.parts = parts;
+  }
+
+  public Double getSummaryFreshAmount() {
+    return summaryFreshAmount;
+  }
+
+  public void setSummaryFreshAmount(Double summaryFreshAmount) {
+    this.summaryFreshAmount = summaryFreshAmount;
   }
 }

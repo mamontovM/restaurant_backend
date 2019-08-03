@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.relex.restaurant.db.JpaRepository.IngredientRepository;
 import ru.relex.restaurant.service.DTO.*;
+import ru.relex.restaurant.service.IIngredientPartService;
 import ru.relex.restaurant.service.IIngredientService;
 import ru.relex.restaurant.service.mapper.IIngredientMapper;
 
@@ -15,14 +16,16 @@ import java.util.List;
 
 @Service
 public class IngredientService implements IIngredientService {
-  public IngredientService(final IngredientRepository repository, final IIngredientMapper mapper) {
+  public IngredientService(final IngredientRepository repository, final IIngredientMapper mapper,
+                           final IIngredientPartService ingredientPartService) {
     this.repository = repository;
     this.mapper = mapper;
-
+    this.ingredientPartService = ingredientPartService;
   }
 
   private final IngredientRepository repository;
   private final IIngredientMapper mapper;
+  private final IIngredientPartService ingredientPartService;
 
   private static final Integer DISHES_IN_RESERVE = 10; // количество блюд в запасе, для рассчета недостающих ингредиентов
   private static final Integer MIN_EXPIRATION_DATE = 7; // минимальный запас срока годности в днях
@@ -39,7 +42,11 @@ public class IngredientService implements IIngredientService {
 
     Pageable sortAndPaginator = PageRequest.of(pageIndex, pageSize, Sort.Direction.fromString(sortDirection), sortedBy);
 
-    result.setItems(mapper.toDto(repository.findAll(sortAndPaginator).getContent()));
+    List<IngredientDto> ingredients = mapper.toDto(repository.findAll(sortAndPaginator).getContent());
+    for (IngredientDto ingredient : ingredients) {
+      ingredient.setSummaryFreshAmount(ingredientPartService.summaryAmountOfIngredient(ingredient.getId()));
+    }
+    result.setItems(ingredients);
     result.setTotalCount(repository.count());
 
     return result;
@@ -74,11 +81,10 @@ public class IngredientService implements IIngredientService {
     List<MissingIngredientDto> missingIngredietns = new ArrayList<>();
     Double maxCountOfIngredientInDishes = 0.0;
 
-    //
+
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DATE, MIN_EXPIRATION_DATE - 1);
-    // получить максимальное количество ингредиента в блюде из меню и умножить на константу DishesInReserve = 10
-    // если
+
     for (int i = 0; i < allIngredietns.size(); i++) {
       maxCountOfIngredientInDishes = 0.0;
 

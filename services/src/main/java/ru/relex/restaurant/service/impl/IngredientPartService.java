@@ -179,7 +179,7 @@ public class IngredientPartService implements IIngredientPartService {
    * false  - если не хватило ингредиентов (количество ингредиентов на складе не изменится)
    */
   public boolean debetIngredients(List<OrderDishDto> dishes) {
-    //посчитать все ингредиенты
+    //посчитать нужное количество ингредиентов
     Map<Integer, Double> needIngredientsAmount = new HashMap<>();
     for (int i = 0; i < dishes.size(); i++) {
       List<DishIngredientDto> consist = dishes.get(i).getDish().getConsist();
