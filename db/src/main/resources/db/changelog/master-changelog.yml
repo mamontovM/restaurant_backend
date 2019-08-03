@@ -51,3 +51,11 @@ databaseChangeLog:
         - sqlFile:
             path: changesets/changeset_5.0.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 7
+      author: mmamontov
+      comment: Fill history, order_dish with test data
+      changes:
+        - sqlFile:
+            path: changesets/changeset_6.0.sql
+            relativeToChangelogFile: true
