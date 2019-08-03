@@ -60,8 +60,9 @@ public class IngredientController {
       @RequestParam(name = "pageIndex", required = false, defaultValue = "0") int pageIndex,
       @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
       @RequestParam(name = "sortedBy", required = false, defaultValue = "id") String sortedBy,
-      @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir) {
-    return ingredientService.listIngredients(pageIndex, pageSize, sortDir, sortedBy);
+      @RequestParam(name = "sortDir", required = false, defaultValue = "asc") String sortDir,
+      @RequestParam(name = "filter", required = false, defaultValue = "") String filter) {
+    return ingredientService.listIngredients(pageIndex, pageSize, sortDir, sortedBy, filter);
   }
 
   @GetMapping("/missing")

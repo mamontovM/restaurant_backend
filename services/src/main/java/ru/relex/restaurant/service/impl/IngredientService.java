@@ -37,12 +37,12 @@ public class IngredientService implements IIngredientService {
   }
 
   @Override
-  public IngredientsWithTotalCountDto listIngredients(int pageIndex, int pageSize, String sortDirection, String sortedBy) {
+  public IngredientsWithTotalCountDto listIngredients(int pageIndex, int pageSize, String sortDirection, String sortedBy, String filter) {
     IngredientsWithTotalCountDto result = new IngredientsWithTotalCountDto();
 
     Pageable sortAndPaginator = PageRequest.of(pageIndex, pageSize, Sort.Direction.fromString(sortDirection), sortedBy);
 
-    List<IngredientDto> ingredients = mapper.toDto(repository.findAll(sortAndPaginator).getContent());
+    List<IngredientDto> ingredients = mapper.toDto(repository.findIngredientsByNameLikeIgnoreCase("%" + filter + "%", sortAndPaginator).getContent());
     for (IngredientDto ingredient : ingredients) {
       ingredient.setSummaryFreshAmount(ingredientPartService.summaryAmountOfIngredient(ingredient.getId()));
     }
